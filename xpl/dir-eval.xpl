@@ -9,13 +9,14 @@
   <p:output port="result"/>
   
   <p:option name="path" required="true"/>
+  <p:option name="exclude-filter" select="''"/>
   
   <p:import href="http://transpect.io/xproc-util/file-uri/xpl/file-uri.xpl"/>
   <p:import href="http://transpect.io/xproc-util/recursive-directory-list/xpl/recursive-directory-list.xpl"/>
   
   <tr:recursive-directory-list name="list-a9s">
     <p:with-option name="path" select="$path"/>
-    <p:with-option name="exclude-filter" select="'makelib'"/>
+    <p:with-option name="exclude-filter" select="$exclude-filter"/>
   </tr:recursive-directory-list>
   
   <p:group>
