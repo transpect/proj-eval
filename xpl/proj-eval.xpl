@@ -14,6 +14,8 @@
   
   <p:option name="path"  select="'http://this.transpect.io/'"/>
   <p:option name="module-factor" select="10"/>
+  <p:option name="debug" select="'no'"/>
+  <p:option name="debug-dir-uri" select="'debug'"/>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="dir-eval.xpl"/>
@@ -41,6 +43,8 @@
       
       <tr:dir-eval name="eval-module">
         <p:with-option name="path" select="concat($proj-path, c:directory/@name)"/>
+        <p:with-option name="debug" select="$debug"/>
+        <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
       </tr:dir-eval>
       
     </p:for-each>
@@ -53,16 +57,20 @@
       </p:input>
     </p:insert>
     
+    <p:add-attribute match="/results" attribute-name="a9s-elm-count">
+      <p:with-option name="attribute-value" select="/results/result[1]/@elm-count"/>
+    </p:add-attribute>
+    
+    <p:add-attribute match="/results" attribute-name="module-elm-count">
+      <p:with-option name="attribute-value" select="sum(/results/result[position() ne 1]/@elm-count)"/>
+    </p:add-attribute>
+    
     <p:add-attribute match="/results" attribute-name="points">
       <p:with-option name="attribute-value" 
-                     select="  (  /results/result[1]/@xproc-count
-                                + /results/result[1]/@xproc-elm-count 
-                                + /results/result[1]/@xslt-count 
-                                + /results/result[1]/@xslt-elm-count)
-                             + (  sum(/results/result[position() ne 1]/@xproc-count)     div $module-factor
-                                + sum(/results/result[position() ne 1]/@xproc-elm-count) div $module-factor
-                                + sum(/results/result[position() ne 1]/@xslt-elm-count)  div $module-factor
-                                + sum(/results/result[position() ne 1]/@xslt-elm-count)  div $module-factor)"/>
+                     select="round-half-to-even(
+                                 (  /results/result[1]/@elm-count)
+                               + (  sum(/results/result[position() ne 1]/@elm-count) div $module-factor)
+                             )"/>
     </p:add-attribute>
 
   </p:group>
