@@ -1,2 +1,2 @@
 # proj-eval
-Simple approatch to evaluate the complexity of a transpect project
+Simple approach to evaluate the complexity of a transpect project
