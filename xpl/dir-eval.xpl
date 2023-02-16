@@ -21,8 +21,7 @@
   
   <tr:recursive-directory-list name="list-a9s">
     <p:with-option name="path" select="$path"/>
-    <p:with-option name="exclude-filter" select="'makelib'"/>
-    <p:with-option name="exclude-filter" select="$exclude-filter"/>
+    <p:with-option name="exclude-filter" select="string-join(('proj-eval', $exclude-filter), '|')"/>
   </tr:recursive-directory-list>
   
   <tr:store-debug>
