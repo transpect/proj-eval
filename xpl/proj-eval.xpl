@@ -16,6 +16,7 @@
   <p:option name="module-factor" select="10"/>
   <p:option name="debug" select="'no'"/>
   <p:option name="debug-dir-uri" select="'debug'"/>
+  <p:option name="exclude-filter" select="'makelib'"/>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="dir-eval.xpl"/>
@@ -32,6 +33,7 @@
   
     <tr:dir-eval name="eval-a9s">
       <p:with-option name="path" select="concat($proj-path, 'a9s')"/>
+      <p:with-option name="exclude-filter" select="$exclude-filter"/>
     </tr:dir-eval>
   
     <p:directory-list name="dir-list">
