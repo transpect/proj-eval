@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-  xmlns:c="http://www.w3.org/ns/xproc-step" 
+  xmlns:c="http://www.w3.org/ns/xproc-step"
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:tr="http://transpect.io"
   version="1.0" 
   name="dir-eval" 
@@ -24,8 +25,12 @@
     <p:with-option name="exclude-filter" select="string-join(('proj-eval', $exclude-filter), '|')"/>
   </tr:recursive-directory-list>
   
+  <cx:message>
+    <p:with-option name="message" select="'[info] count xproc/xslt elements in ', $path"/>
+  </cx:message>
+  
   <tr:store-debug>
-    <p:with-option name="pipeline-step" select="concat('proj-eval/dir-listing__', replace($path, '^.+/(.+?/.+?)/?$', '$1'))"/>
+    <p:with-option name="pipeline-step" select="concat('proj-eval/dir-listing__', replace(replace($path, '^.+/(.+?/.+?/.+?)/?$', '$1'), '/', '--'))"/>
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
