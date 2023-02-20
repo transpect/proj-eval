@@ -78,10 +78,10 @@
     
     <p:add-attribute match="/results" attribute-name="points">
       <p:with-option name="attribute-value" 
-                     select="round-half-to-even(
-                                 (  /results/result[1]/@elm-count)
-                               + (  sum(/results/result[position() ne 1]/@elm-count) div $module-factor)
-                             )"/>
+                     select="sum((/results/result[1]/@elm-count,
+                                  /results/result[1]/@line-count,
+                                  round-half-to-even(sum(/results/result[position() ne 1]/@elm-count) div $module-factor),
+                                  round-half-to-even(sum(/results/result[position() ne 1]/@line-count) div $module-factor)))"/>
     </p:add-attribute>
     
     <tr:store-debug pipeline-step="proj-eval/results">
