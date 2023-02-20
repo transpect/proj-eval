@@ -19,6 +19,7 @@
   <p:option name="exclude-filter" select="'makelib'"/>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
   <p:import href="dir-eval.xpl"/>
   
   <p:xslt template-name="resolve" name="catalog-resolver">
@@ -63,8 +64,16 @@
       <p:with-option name="attribute-value" select="/results/result[1]/@elm-count"/>
     </p:add-attribute>
     
+    <p:add-attribute match="/results" attribute-name="a9s-line-count">
+      <p:with-option name="attribute-value" select="/results/result[1]/@line-count"/>
+    </p:add-attribute>
+    
     <p:add-attribute match="/results" attribute-name="module-elm-count">
       <p:with-option name="attribute-value" select="sum(/results/result[position() ne 1]/@elm-count)"/>
+    </p:add-attribute>
+    
+    <p:add-attribute match="/results" attribute-name="module-line-count">
+      <p:with-option name="attribute-value" select="sum(/results/result[position() ne 1]/@line-count)"/>
     </p:add-attribute>
     
     <p:add-attribute match="/results" attribute-name="points">
@@ -74,6 +83,11 @@
                                + (  sum(/results/result[position() ne 1]/@elm-count) div $module-factor)
                              )"/>
     </p:add-attribute>
+    
+    <tr:store-debug pipeline-step="proj-eval/results">
+      <p:with-option name="active" select="$debug"/>
+      <p:with-option name="base-uri" select="$debug-dir-uri"/>
+    </tr:store-debug>
 
   </p:group>
   
