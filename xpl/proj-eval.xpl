@@ -16,7 +16,7 @@
   <p:option name="module-factor" select="10"/>
   <p:option name="debug" select="'no'"/>
   <p:option name="debug-dir-uri" select="'debug'"/>
-  <p:option name="exclude-filter" select="'proj-eval makelib'"/>
+  <p:option name="exclude-filter" select="'(proj-eval|test_(before|after)|debug|makelib)'"/>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
