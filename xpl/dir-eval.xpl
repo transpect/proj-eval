@@ -22,7 +22,7 @@
   
   <tr:recursive-directory-list name="list-a9s">
     <p:with-option name="path" select="$path"/>
-    <p:with-option name="exclude-filter" select="string-join(('proj-eval', $exclude-filter), '|')"/>
+    <p:with-option name="exclude-filter" select="string-join(('proj-eval', 'makelib', $exclude-filter), '|')"/>
   </tr:recursive-directory-list>
   
   <cx:message>
