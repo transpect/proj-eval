@@ -3,6 +3,12 @@ Simple approach to evaluate the complexity of a transpect project
 
 This XProc script can be checked out in a transpect project directory and evaluate the complexity of a project by analyzing the number of XML elements in XML files and lines in text files. The result is an XML file showing the number as function points.
 
+You can invoke the script with an XProc processor, e.g. XML Calabash:
+
+```shell
+$ ./calabash/calabash.sh -o result=out.xml proj-eval/xpl/proj-eval.xpl debug=yes debug-dir-uri=file:/home/myUser/myProject/trunk/debug
+```
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <results points="22956" module-elm-count="56804" a9s-line-count="954" module-line-count="437" a9s-elm-count="16278">
