@@ -71,7 +71,9 @@
     
     <p:for-each name="module-iteration">
       <p:iteration-source 
-        select="c:directory//c:directory[not(@name = ('.svn', 'a9s', 'calabash', 'conf', 'xmlcatalog', 'debug'))
+        select="c:directory//c:directory[not(@name = ('.svn', 'a9s', 'calabash', 'conf', 'xmlcatalog'))
+                                         and
+                                         not(matches(@name, concat('^', $exclude-filter, '$')))
                                          or
                                          (some $p in /c:directory/proj-eval/module-path 
                                           satisfies (starts-with(@path, replace(concat($p, '/'), '/+$', '/'))))]">
