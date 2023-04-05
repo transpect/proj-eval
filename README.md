@@ -3,6 +3,8 @@ Simple approach to evaluate the complexity of a transpect project
 
 This XProc script can be checked out in a transpect project directory and evaluate the complexity of a project by analyzing the number of XML elements in XML files and lines in text files. The result is an XML file showing the number as function points.
 
+It will look for a file conf/proj-eval.xml. If it is found and if it contains relative file system paths at `/proj-eval/module-path` (see the [sample file](https://github.com/transpect/proj-eval/blob/main/sample-conf/proj-eval.xml)), the files in these directories will be considered as modules rather than as project-specific code. It is a means to weight module-like common code that is mounted under a9s/common as module code, not as custom code.
+
 You can invoke the script with an XProc processor, e.g. XML Calabash:
 
 ```shell
