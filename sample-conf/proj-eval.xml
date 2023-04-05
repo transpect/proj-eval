@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- store it in the transpect project’s conf directory, as proj-eval.xml -->
+<proj-eval>
+  <!-- Trailing slashes are optional. A missing trailing slash will not 
+       match, for example, a directory a9s/commons -->
+  <module-path>a9s/common/</module-path>
+</proj-eval>

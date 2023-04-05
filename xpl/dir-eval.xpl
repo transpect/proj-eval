@@ -8,16 +8,18 @@
   type="tr:dir-eval">
   
   <p:output port="result"/>
-  
+
+  <p:input port="conf"/>
+
   <p:option name="path" required="true"/>
   <p:option name="debug" select="'no'"/>
   <p:option name="debug-dir-uri" select="'debug'"/>
   <p:option name="exclude-filter" select="''"/>
-  
+
   <p:import href="http://transpect.io/xproc-util/file-uri/xpl/file-uri.xpl"/>
   <p:import href="http://transpect.io/xproc-util/recursive-directory-list/xpl/recursive-directory-list.xpl"/>
   <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl" />
-  
+
   <p:variable name="xml-ext-regex" select="'\.x(pl|sl)$'"/>
   
   <tr:recursive-directory-list name="list-a9s">
@@ -29,6 +31,37 @@
     <p:with-option name="message" select="'[info] subdir: ', $path"/>
   </cx:message>
   
+  <p:xslt name="add-path">
+    <p:input port="parameters"><p:empty/></p:input>
+    <p:input port="stylesheet">
+      <p:inline>
+        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+           version="2.0">
+          <xsl:template match="node() | @*">
+            <xsl:copy>
+              <xsl:apply-templates select="@*, node()"/>
+            </xsl:copy>
+          </xsl:template>
+          <xsl:template match="*:directory">
+            <xsl:copy>
+              <xsl:attribute name="path" select="string-join(ancestor-or-self::*:directory/@name, '/')"/>
+              <xsl:apply-templates select="@*, node()"/>
+            </xsl:copy>
+          </xsl:template>
+        </xsl:stylesheet>
+      </p:inline>
+    </p:input>
+  </p:xslt>
+  
+  <p:delete>
+    <p:with-option name="match" select="concat('c:directory[@name = (''.svn'', ''xmlcatalog'', ''debug'') or @path = (',
+                                               string-join(for $p in /proj-eval/module-path return concat('''', replace($p, '/+$', ''), ''''), ', '),
+                                               ')]'
+                                              )">
+      <p:pipe port="conf" step="dir-eval"/>
+    </p:with-option>
+  </p:delete>
+
   <tr:store-debug>
     <p:with-option name="pipeline-step" select="concat('proj-eval/dir-listing__', replace(replace($path, '^.+/(.+?/.+?/.+?)/?$', '$1'), '/', '--'))"/>
     <p:with-option name="active" select="$debug"/>

@@ -31,23 +31,59 @@
   
   <p:group>
     <p:variable name="proj-path" select="/result/@href"/>
-  
+    
+    <p:try name="read-conf-if-available">
+      <p:group>
+        <p:output port="result" primary="true"/>
+        <p:load name="load-conf">
+          <p:with-option name="href" select="concat($proj-path, 'conf/proj-eval.xml')"/>
+        </p:load>
+      </p:group>
+      <p:catch>
+        <p:output port="result" primary="true"/>
+        <p:identity>
+          <p:input port="source">
+            <p:inline><proj-eval/></p:inline>
+          </p:input>
+        </p:identity>
+      </p:catch>
+    </p:try>
+    
     <tr:dir-eval name="eval-a9s">
       <p:with-option name="path" select="concat($proj-path, 'a9s')"/>
       <p:with-option name="exclude-filter" select="$exclude-filter"/>
+      <p:with-option name="debug" select="$debug"/>
+      <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+      <p:input port="conf">
+        <p:pipe port="result" step="read-conf-if-available"/>
+      </p:input>
     </tr:dir-eval>
   
     <p:directory-list name="dir-list">
       <p:with-option name="path" select="$proj-path"/>
     </p:directory-list>
     
+    <p:insert match="/c:directory" position="first-child">
+      <p:input port="insertion">
+        <p:pipe port="result" step="read-conf-if-available"/>
+      </p:input>
+    </p:insert>
+    
     <p:for-each name="module-iteration">
-      <p:iteration-source select="c:directory//c:directory[not(@name = ('.svn', 'a9s', 'calabash', 'conf', 'xmlcatalog'))]"/>
+      <p:iteration-source 
+        select="c:directory//c:directory[not(@name = ('.svn', 'a9s', 'calabash', 'conf', 'xmlcatalog', 'debug'))
+                                         or
+                                         (some $p in /c:directory/proj-eval/module-path 
+                                          satisfies (starts-with(@path, replace(concat($p, '/'), '/+$', '/'))))]">
+      </p:iteration-source>
       
       <tr:dir-eval name="eval-module">
         <p:with-option name="path" select="concat($proj-path, c:directory/@name)"/>
         <p:with-option name="debug" select="$debug"/>
         <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+        <p:input port="conf">
+          <p:pipe port="result" step="read-conf-if-available"/>
+        </p:input>
       </tr:dir-eval>
       
     </p:for-each>
